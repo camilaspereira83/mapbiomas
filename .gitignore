@@ -1,0 +1,13 @@
+# Ignore everything but .gitgnore
+/*
+!.gitignore
+
+# Ignore all Wordpress-related but our theme
+!/wp-content/
+/wp-content/*
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/nome-do-tema/
+
+# Ignore npm modules
+node_modules
