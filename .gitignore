@@ -7,7 +7,7 @@
 /wp-content/*
 !/wp-content/themes/
 /wp-content/themes/*
-!/wp-content/themes/nome-do-tema/
+!/wp-content/themes/mapbiomas/
 
 # Ignore npm modules
 node_modules

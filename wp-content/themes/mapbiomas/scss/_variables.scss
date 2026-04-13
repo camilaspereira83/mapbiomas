@@ -1,0 +1,18 @@
+// Bootstrap variables
+$body-bg: #ffffff;
+$body-color: #111;
+
+$font-family-base: "Lato", sans-serif;
+
+@font-face {
+  font-family: 'bootstrap-icons';
+  src: url('assets/fonts/eot/bootstrap-icons.eot');
+  src: url('assets/fonts/eot/bootstrap-icons.eot?#iefix') format('embedded-opentype'),
+       url('assets/fonts/woff/bootstrap-icons.woff') format('woff'),
+       url('assets/fonts/ttf/bootstrap-icons.ttf') format('truetype'),
+       url('assets/fonts/svg/bootstrap-icons.svg#bootstrap-icons') format('svg');
+
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
