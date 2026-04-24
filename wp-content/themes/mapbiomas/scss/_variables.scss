@@ -1,18 +1,36 @@
 // Bootstrap variables
-$body-bg: #ffffff;
-$body-color: #111;
+$body-bg: white;
+$body-color: #737373;
+$color-verde-claro: #77B893;
+$color-verde-claro-50: #F6FCF9;
+$color-azul-escuro: #62A5BB;
+$color-laranja-escuro: #E18837;
+$color-amarelo-escuro: #C5C56C;
+$color-neutral-50: #FAFAFA;
+$color-neutral-100: #F5F5F5;
+$color-neutral-200: #E5E5E5;
+$color-neutral-600: #525252;
+$color-neutral-700: #404040;
+$color-border: #E5E7EB;
+$color-desmatamento: #B5413F;
 
-$font-family-base: "Lato", sans-serif;
+$font-family-heading: "Montserrat", sans-serif;
+$font-family-base: "Open Sans", sans-serif;
 
-@font-face {
-  font-family: 'bootstrap-icons';
-  src: url('assets/fonts/eot/bootstrap-icons.eot');
-  src: url('assets/fonts/eot/bootstrap-icons.eot?#iefix') format('embedded-opentype'),
-       url('assets/fonts/woff/bootstrap-icons.woff') format('woff'),
-       url('assets/fonts/ttf/bootstrap-icons.ttf') format('truetype'),
-       url('assets/fonts/svg/bootstrap-icons.svg#bootstrap-icons') format('svg');
-
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+$spacing-96-desktop: 6rem;
+$spacing-80-desktop: 5rem;
+$spacing-64-desktop: 4rem;
+$spacing-48-desktop: 3rem;
+$spacing-40-desktop: 2.5rem;
+$spacing-32-desktop: 2rem;
+$spacing-24-desktop: 1.5rem;
+$spacing-20-desktop: 1.25rem;
+$spacing-16-desktop: 1rem;
+$fs-48-desktop: 3rem;
+$fs-36-desktop: 2.25rem;
+$fs-30-desktop: 1.875rem;
+$fs-24-desktop: 1.5rem;
+$fs-20-desktop: 1.25rem;
+$fs-18-desktop: 1.125rem;
+$fs-16-desktop: 1rem;
+$fs-14-desktop: 0.875rem;

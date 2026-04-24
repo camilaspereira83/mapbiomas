@@ -2,21 +2,26 @@ import 'owl.carousel';
 import 'bootstrap';
 import AOS from 'aos';
 
-AOS.init();
+AOS.init({
+  duration: 1200,
+});
 
 var main = {
   init: function () {
     this.main();
     this.carousel1();
     this.carousel2();
+    this.animateNumbers();
+    this.newsEventsTabs();
+    this.languageSelector();
   },
   main: function () {
     $("#menuToggle").click(function () {
-      if ($(".menu-principal").hasClass("expanded")) {
-        $(".menu-principal.expanded").removeClass("expanded");
+      if ($(".main-navigation").hasClass("expanded")) {
+        $(".main-navigation.expanded").removeClass("expanded");
         $(this).removeClass("active");
       } else {
-        $(".menu-principal").addClass("expanded");
+        $(".main-navigation").addClass("expanded");
         $(this).addClass("active");
       }
     });
@@ -70,6 +75,201 @@ var main = {
       });
     });
   },
+  animateNumbers: function () {
+    const statNumbers = document.querySelectorAll('.stat-number');
+
+    const animateNumber = (element) => {
+      const target = parseInt(element.getAttribute('data-target'));
+      const duration = 2000; // 2 seconds
+      const step = target / (duration / 16); // 60fps
+      let current = 0;
+
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          element.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(current).toLocaleString();
+        }
+      }, 16);
+    };
+
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateNumber(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    statNumbers.forEach(number => {
+      observer.observe(number);
+    });
+  },
+  newsEventsTabs: function () {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        button.classList.add('active');
+
+        // Hide all tab contents
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Show the corresponding tab content
+        const tabId = button.getAttribute('data-tab');
+        const targetContent = document.getElementById(tabId);
+        if (targetContent) {
+          targetContent.classList.add('active');
+        }
+      });
+    });
+
+    // Initialize thumbnail carousels for each tab
+    this.initThumbnailCarousels();
+  },
+  initThumbnailCarousels: function () {
+    const carousels = document.querySelectorAll('.news-carousel');
+
+    carousels.forEach(carousel => {
+      const wrapper = carousel.querySelector('.thumbnails-wrapper');
+      const thumbnails = carousel.querySelectorAll('.thumbnail-item');
+      const prevArrow = carousel.querySelector('.prev-arrow');
+      const nextArrow = carousel.querySelector('.next-arrow');
+      const featuredImage = carousel.querySelector('.featured-image img');
+      const featuredTitle = carousel.querySelector('.featured-title a');
+      const featuredExcerpt = carousel.querySelector('.featured-excerpt');
+      const readMoreBtn = carousel.querySelector('.read-more-btn');
+      const dotsContainer = carousel.querySelector('.carousel-dots');
+      
+      let dots = [];
+
+      let currentIndex = 0;
+
+      const updateFeatured = (index) => {
+        const selectedThumbnail = thumbnails[index];
+
+        if (selectedThumbnail) {
+            const image = selectedThumbnail.dataset.image;
+            const title = selectedThumbnail.dataset.title;
+            const excerpt = selectedThumbnail.dataset.excerpt;
+            const link = selectedThumbnail.dataset.link;
+            const tag = selectedThumbnail.dataset.tag;
+
+            featuredImage.src = image;
+            featuredImage.alt = title;
+            featuredTitle.textContent = title;
+            featuredTitle.href = link;
+            featuredExcerpt.textContent = excerpt;
+            readMoreBtn.href = link;
+
+            const featuredTag = carousel.querySelector('.featured-tag');
+            if (featuredTag) {
+            if (tag) {
+                featuredTag.textContent = tag;
+                featuredTag.style.display = 'inline-block';
+            } else {
+                featuredTag.style.display = 'none';
+            }
+            }
+
+            thumbnails.forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+            });
+
+            if (dots.length) {
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+            currentIndex = index;
+        }
+        };
+
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', () => {
+          updateFeatured(index);
+        });
+      });
+
+      if (prevArrow) {
+        prevArrow.addEventListener('click', () => {
+          const newIndex = currentIndex > 0 ? currentIndex - 1 : thumbnails.length - 1;
+          updateFeatured(newIndex);
+          scrollToThumbnail(newIndex);
+        });
+      }
+
+      if (nextArrow) {
+        nextArrow.addEventListener('click', () => {
+          const newIndex = currentIndex < thumbnails.length - 1 ? currentIndex + 1 : 0;
+          updateFeatured(newIndex);
+          scrollToThumbnail(newIndex);
+        });
+      }
+
+      const scrollToThumbnail = (index) => {
+        if (wrapper && thumbnails[index]) {
+          const thumbnail = thumbnails[index];
+          const container = wrapper;
+          const thumbnailLeft = thumbnail.offsetLeft;
+          const containerWidth = container.offsetWidth;
+          const thumbnailWidth = thumbnail.offsetWidth;
+
+          container.scrollLeft = thumbnailLeft - (containerWidth / 2) + (thumbnailWidth / 2);
+        }
+      };
+
+      if (dotsContainer) {
+        thumbnails.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('carousel-dot');
+
+            if (index === 0) dot.classList.add('active');
+
+            dot.addEventListener('click', () => {
+            updateFeatured(index);
+            scrollToThumbnail(index);
+            });
+
+            dotsContainer.appendChild(dot);
+            dots.push(dot);
+        });
+        }
+
+      updateFeatured(0);
+    });
+  },
+  languageSelector: function () {
+    const languageCurrent = document.querySelector('.language-current');
+    const headerLanguage = document.querySelector('.header__language');
+
+    if (languageCurrent && headerLanguage) {
+      languageCurrent.addEventListener('click', function() {
+        headerLanguage.classList.toggle('is-open');
+        this.setAttribute('aria-expanded', headerLanguage.classList.contains('is-open'));
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!headerLanguage.contains(e.target)) {
+          headerLanguage.classList.remove('is-open');
+          languageCurrent.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  },
 }
 main.init();
 
@@ -86,24 +286,9 @@ $('nav a').click(function() {
 	}
 });
 
- 
- $(document).ready(function(){
-$('.menu-principal a[href^="#"]').on('click', function(e) {
-   e.preventDefault();
-   var id = $(this).attr('href'),
-       targetOffset = $(id).offset().top;
-      
-   $('html, body').animate({
-     scrollTop: targetOffset - 100
-   }, 500);
- });
-});
-
 //ADD ACTIVE CLASS NO NAV
-
- 
 document.addEventListener('DOMContentLoaded', function () {
-  const menu = document.querySelector('.menu-principal');
+  const menu = document.querySelector('.main-navigation');
   if (!menu) return;
 
   const links = [...menu.querySelectorAll('a[href]')];

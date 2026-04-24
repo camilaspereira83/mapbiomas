@@ -12,10 +12,10 @@
     "watch:js": "webpack --watch"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "aos": "^2.3.4",
     "autoprefixer": "^10.4.14",
     "bootstrap": "^5.3.8",
-    "bootstrap-icons": "^1.13.1",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^8.2.1",
     "interactjs": "^1.10.17",

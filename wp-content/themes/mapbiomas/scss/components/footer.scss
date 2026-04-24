@@ -1,3 +1,113 @@
 footer {
+    position: relative;
+    padding-top: $spacing-64-desktop;
+    padding-bottom: 100px;
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(
+            90deg,
+            #F7963F 0%,
+            #84CAA0 25%,
+            #75C7E0 50%,
+            #DCDB77 75%,
+            #E18837 100%
+        );
+    }
+    .footer-content-nav {
+        display: flex;
+        justify-content: space-between;
+        .footer-logo {
+            margin-bottom: $spacing-32-desktop;
+            img {
+                margin-bottom: 0.8rem;
+            }
+            p {
+                color: $color-neutral-600;
+                font-size: $fs-16-desktop;
+            }
+        }
+        .footer-cc {
+            background-color: #F2F8F5;
+            padding: $spacing-16-desktop;
+            border-radius: 16px;
+            width: 303px;
+            display: flex;
+            gap: 1rem;
+            p {
+                margin-bottom: 0;
+            }
+        }
+        .footer-nav {
+            display: flex;
+            gap: $spacing-64-desktop;
+            h4 {
+                font-size: $fs-14-desktop;
+                text-transform: uppercase;
+                margin-bottom: $spacing-16-desktop;
+            }
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                li {
+                    margin-bottom: $spacing-16-desktop;
+                    a {
+                        color: $color-neutral-600;
+                        font-size: $fs-16-desktop;
+                        text-decoration: none;
+                        &:hover {
+                            color: $color-verde-claro;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
+.footer-info {
+    background-color: #FAFAFA;
+    padding: $spacing-48-desktop;
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        p {
+            font-size: $fs-16-desktop;
+            margin-bottom: 0;
+        }
+        .social {
+            display: flex;
+            gap: 1rem;
+            a {
+                width: 24px;
+                height: 24px;
+                display: inline-block;
+                background-image: url(assets/img/social.svg);
+                background-repeat: no-repeat;
+                &:hover {
+                    background-image: url(assets/img/social-hover.svg);
+                }
+                &.instagram {
+                    background-position: -48px 0;
+                }
+                &.linkedin {
+                    background-position: -96px 0;
+                }
+                &.x {
+                    background-position: -146px 0;
+                }
+                &.facebook {
+                    background-position: -192px 0;
+                }
+                &.git {
+                    background-position: -240px 0;
+                }
+            }
+        }
+    }
 }
