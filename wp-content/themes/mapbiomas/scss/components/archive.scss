@@ -77,10 +77,17 @@
             display: block;
         }
         .news-card {
+            position: relative;
             border-radius: 16px;
             overflow: hidden;
             @media (max-width: 767px) {
-                    margin-bottom: 30px;
+                margin-bottom: 30px;
+            }
+
+            &__link {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
             }
 
             &__image {
@@ -120,21 +127,41 @@
                 font-size: 12px;
                 font-weight: 400;
                 font-family: $font-family-heading;
-                &.badge-publicacao {
-                    background: rgba($color-verde-claro, 0.08);
+
+                &.badge-iniciativa {
                     color: $color-verde-claro;
+                    background: rgba($color-verde-claro, 0.08);
+                    svg path {
+                        stroke: $color-verde-claro;
+                    }
                 }
-                &.badge-produto {
-                    background: rgba($color-azul-escuro, 0.08);
+                &.badge-publicacao {
                     color: $color-azul-escuro;
+                    background: rgba($color-azul-escuro, 0.08);
+                    svg path {
+                        stroke: $color-azul-escuro;
+                    }
                 }
-                &.badge-mapbiomas-alerta {
-                    background: rgba(#E84130, 0.08);
-                    color: #E84130;
+                &.badge-lancamento {
+                    color: $color-laranja-escuro;
+                    background: rgba($color-laranja-escuro, 0.08);
+                    svg path {
+                        stroke: $color-laranja-escuro;
+                    }
                 }
-                &.badge-mapbiomas-degradacao {
-                    background: rgba(#C5C56C, 0.08);
-                    color: #C5C56C;
+                &.badge-mapa {
+                    color: $color-amarelo-escuro;
+                    background: rgba($color-amarelo-escuro, 0.08);
+                    svg path {
+                        stroke: $color-amarelo-escuro;
+                    }
+                }
+                &.badge-noticia {
+                    color: $body-color;
+                    background: rgba($body-color, 0.08);
+                    svg path {
+                        stroke: $body-color;
+                    }
                 }
             }
             .country {
@@ -350,7 +377,9 @@
 
                 p {
                     font-size: 14px;
-                    margin-bottom: 20px;
+                    margin-bottom: 0;
+                    height: 84px;
+                    overflow: hidden;
                 }
             }
         }

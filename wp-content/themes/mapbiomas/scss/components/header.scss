@@ -126,7 +126,7 @@
                 position: absolute;
                 top: 35px;
                 right: 0;
-                min-width: 100px;
+                min-width: 145px;
                 background: white;
                 border: thin solid $color-border;
                 border-radius: 16px;
@@ -148,7 +148,7 @@
                 }
 
                 .language-label {
-                    width: 20px;
+                    width: auto;
                 }
 
                 .language-option {
@@ -163,6 +163,7 @@
                     font-size: $fs-14-desktop;
                     text-align: left;
                     cursor: pointer;
+                    text-decoration: none;
                     transition: background 0.2s ease;
 
                     .language-flag {
@@ -171,6 +172,11 @@
                         justify-content: center;
                         font-size: 0.875rem;
                         font-weight: 500;
+                    }
+
+                    &.current {
+                        color: $color-verde-claro;
+                        font-weight: 600;
                     }
 
                     &:hover {

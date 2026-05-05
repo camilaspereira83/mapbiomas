@@ -1,0 +1,115 @@
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries a.mbmap-cov-country {
+  cursor: pointer;
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries a.mbmap-cov-country:hover {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+}
+.geographic__content {
+  padding: 4rem 0;
+}
+.geographic__content .mbmap-cov-wrap {
+  text-align: center;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #525252;
+  margin-bottom: 16px;
+}
+@media (max-width: 992px) {
+  .geographic__content .mbmap-cov-wrap .mbmap-cov-title {
+    font-size: 1.5rem;
+  }
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-desc {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto 64px;
+  line-height: 1.5rem;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  max-width: 770px;
+  margin: 0 auto;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: #333;
+  padding: 3px 5px;
+  border-radius: 999px;
+  line-height: 1;
+  text-decoration: none;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country span {
+  color: #333;
+  font-weight: 400;
+  text-decoration: none;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country.active {
+  background: rgba(77, 147, 108, 0.11);
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country.active span {
+  color: #4D936C;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country.implementing {
+  background: rgba(244, 135, 75, 0.11);
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country.implementing span {
+  color: #E8763A;
+}
+.geographic__content .mbmap-cov-wrap .mbmap-cov-countries .mbmap-cov-country img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.geographic-map .mbmap-cov-map-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.geographic-map .mbmap-cov-map-wrap #mbmap-coverage-map {
+  width: 100%;
+  height: 500px;
+  background: #e0eaf0;
+}
+.geographic-map .mbmap-cov-map-wrap #mbmap-coverage-map.leaflet-container {
+  background: #e0eaf0;
+}
+.geographic-map .mbmap-cov-map-wrap .mbmap-cov-legend {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: #444;
+  z-index: 500;
+  pointer-events: none;
+}
+.geographic-map .mbmap-cov-map-wrap .mbmap-cov-legend .mbmap-cov-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.geographic-map .mbmap-cov-map-wrap .mbmap-cov-legend .mbmap-cov-legend-item .mbmap-cov-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
