@@ -1,0 +1,293 @@
+.breadcrumb__title {
+    position: relative;
+    padding: $spacing-48-desktop 0;
+    color: white;
+    margin-bottom: 8px;
+    min-height: 240px;    
+    align-items: center;
+    display: flex;
+    @media (max-width: 992px) {
+        min-height: 170px;
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(
+            90deg,
+            #F7963F 0%,
+            #84CAA0 25%,
+            #75C7E0 50%,
+            #DCDB77 75%,
+            #E18837 100%
+        );
+    }
+
+    &.bg-color-blue {
+        background: linear-gradient(
+            90deg,
+            #1C667F 0%,
+            #62A5BB 100%
+        );
+    }
+    .breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        li {
+            position: relative;
+            padding-right: 1rem;
+            &:after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                margin-top: -3px;
+                right: 0;
+                width: 5px;
+                height: 10px;
+                opacity: 0.5;
+                background-image: url(assets/img/arrow-next.svg);
+                background-repeat: no-repeat;
+                background-position: right center;
+                background-size: auto 100%;
+            }
+            &:last-child {
+                &:after {
+                    display: none;
+                }
+            }
+            a,
+            span {
+                color: white;
+                opacity: 0.5;
+                font-size: $fs-14-desktop;
+                font-weight: 400;
+            }
+            span {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    h1 {
+        font-family: $font-family-heading;
+        font-size: $spacing-64-desktop;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        @media (max-width: 992px) {
+            font-size: $spacing-24-desktop;
+        }
+    }
+
+    h2 {
+        font-size: $fs-18-desktop;
+        color: $color-neutral-200;
+        font-weight: 400;
+        @media (max-width: 992px) {
+            font-size: $spacing-16-desktop;
+        }
+    }
+}
+
+.mission {
+    padding: $spacing-64-desktop 0;
+    .mission__content {
+        margin-bottom: $spacing-96-desktop;
+        p {
+            font-size: $fs-18-desktop;
+            line-height: 1.75;
+            @media (max-width: 992px) {
+                font-size: $spacing-16-desktop;
+                line-height: 1.5rem;
+            }
+        }
+    }
+    .mission__content-cards {
+        display: flex;
+        gap: $spacing-80-desktop;
+        @media (max-width: 992px) {
+            flex-direction: column;
+        }
+        .mission__cards-text {
+            max-width: 400px;
+            h3 {
+                font-family: $font-family-heading;
+                font-size: $fs-36-desktop;
+                font-weight: 700;
+                color: $color-neutral-600;
+                margin-bottom: $spacing-32-desktop;
+                @media (max-width: 992px) {
+                    font-size: $spacing-24-desktop;
+                }
+            }
+            blockquote {
+                display: block;
+                position: relative;
+                padding-left: 24px;
+                border-left: 4px solid $color-verde-claro;
+                font-size: $fs-20-desktop;
+                font-style: italic;
+                font-weight: 300;
+            }
+        }
+        .mission__cards-img {
+            img {
+                width: 100%;
+                height: auto;
+                border-radius: 16px;
+            }
+        }
+    }
+}
+
+.whatwedo {
+    padding: $spacing-64-desktop 0;
+    background-color: $color-neutral-50;
+    .whatwedo__cards {
+        display: grid;
+        grid-template-columns: repeat(2, 2fr);
+        gap: 4rem 10rem;
+        @media (max-width: 992px) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .whatwedo__card {
+            .whatwedo__card-title {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: $spacing-16-desktop;
+                h4 {
+                    font-family: $font-family-heading;
+                    font-size: $fs-24-desktop;
+                    font-weight: 700;
+                    color: $color-neutral-600;
+                    strong {
+                        color: $color-desmatamento;
+                    }
+                }
+            }
+            .whatwedo__card-content {
+                p {
+                    font-size: $fs-16-desktop;
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
+}
+
+.mapping {
+    padding: $spacing-64-desktop 0;
+    background-color: $color-verde-claro-50;
+    .mapping__content-cards {
+        h5 {
+            font-family: $font-family-heading;
+            font-size: $fs-36-desktop;
+            font-weight: 700;
+            color: $color-neutral-600;
+            @media (max-width: 992px) {
+                font-size: $spacing-24-desktop;
+            }
+        }
+        p {
+            font-size: $fs-16-desktop;
+            line-height: $fs-24-desktop;
+            margin-bottom: $spacing-24-desktop;
+        }
+        .mapping__cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: $spacing-40-desktop;
+            @media (max-width: 992px) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .mapping__card {
+                .mapping__img {
+                    width: 100%;
+                    height: 240px;
+                    overflow: hidden;
+                    border-radius: 16px;
+                    margin-bottom: $spacing-16-desktop;
+                    img {
+                        width: auto;
+                        height: auto;
+                        object-fit: cover;
+                        min-width: 100%;
+                        max-width: 100%;
+                        min-height: 240px;
+                    }
+                }
+                .mapping__content {
+                    h6 {
+                        font-size: $fs-20-desktop;
+                        font-weight: 500;
+                        color: $color-neutral-600;
+                        margin-bottom: $spacing-16-desktop;
+                    }
+                    p {
+                        font-size: $fs-16-desktop;
+                        line-height: $fs-24-desktop;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dna {
+    padding: $spacing-64-desktop 0;
+    text-align: center;
+    .dna__content {
+        h5 {
+            font-family: $font-family-heading;
+            font-size: $fs-36-desktop;
+            font-weight: 700;
+            color: $color-neutral-600;
+            margin-bottom: 0;
+            @media (max-width: 992px) {
+                font-size: $spacing-24-desktop;
+            }
+        }
+        p {
+            font-size: $fs-16-desktop;
+            line-height: $fs-24-desktop;
+        }
+        .dna__cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: $spacing-40-desktop;
+            margin-bottom: $spacing-64-desktop;
+            margin-top: $spacing-40-desktop;
+            @media (max-width: 992px) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .dna__card {
+                img {
+                    margin-bottom: $spacing-20-desktop;
+                }
+                h6 {
+                    font-size: $fs-18-desktop;
+                    font-weight: 500;
+                    color: $color-neutral-600;
+                    margin-bottom: 8px;
+                }
+                p{
+                    font-size: $fs-16-desktop;
+                    line-height: $fs-24-desktop;
+                }
+            }
+            &:last-child {
+                grid-template-columns: repeat(2, 1fr);
+                margin-bottom: 0;
+                padding: 0 $spacing-80-desktop;
+                @media (max-width: 992px) {
+                    grid-template-columns: repeat(1, 1fr);
+                }
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
 <?php
 /**
- * FAQ Template
+ * Glossario Template
  * 
- * Template Name: FAQ
+ * Template Name: Glossario
  *
  * The template for displaying the website
  *
@@ -11,6 +11,6 @@
 
 get_header();
 
-echo new FAQ();
+echo new Glossario();
 
 get_footer();

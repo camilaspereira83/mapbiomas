@@ -14,6 +14,7 @@ var main = {
     this.animateNumbers();
     this.newsEventsTabs();
     this.languageSelector();
+    this.faqAccordion();
   },
   main: function () {
     $("#menuToggle").click(function () {
@@ -79,7 +80,7 @@ var main = {
     const statNumbers = document.querySelectorAll('.stat-number');
 
     const animateNumber = (element) => {
-      const target = parseInt(element.getAttribute('data-target'));
+      const target = parseInt(element.getAttribute('data-target').replace(/[^0-9]/g, ''));
       const duration = 2000; // 2 seconds
       const step = target / (duration / 16); // 60fps
       let current = 0;
@@ -270,6 +271,57 @@ var main = {
       });
     }
   },
+  faqAccordion: function () {
+    const faqItems = document.querySelectorAll('.faq__item');
+
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq__question');
+      const answer = item.querySelector('.faq__answer');
+      const icon = item.querySelector('.faq__icon');
+
+      if (question && answer) {
+        question.addEventListener('click', function() {
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+          // Close all other items
+          faqItems.forEach(otherItem => {
+            const otherQuestion = otherItem.querySelector('.faq__question');
+            const otherAnswer = otherItem.querySelector('.faq__answer');
+            const otherIcon = otherItem.querySelector('.faq__icon');
+
+            if (otherItem !== item && otherAnswer) {
+              otherQuestion.setAttribute('aria-expanded', 'false');
+              otherAnswer.classList.remove('active');
+              otherAnswer.style.maxHeight = null;
+              if (otherIcon) {
+                otherIcon.src = otherIcon.dataset.plus;
+                otherIcon.alt = 'Abrir';
+              }
+            }
+          });
+
+          // Toggle current item
+          if (isExpanded) {
+            this.setAttribute('aria-expanded', 'false');
+            answer.classList.remove('active');
+            answer.style.maxHeight = null;
+            if (icon) {
+              icon.src = icon.dataset.plus;
+              icon.alt = 'Abrir';
+            }
+          } else {
+            this.setAttribute('aria-expanded', 'true');
+            answer.classList.add('active');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            if (icon) {
+              icon.src = icon.dataset.minus;
+              icon.alt = 'Fechar';
+            }
+          }
+        });
+      }
+    });
+  },
 }
 main.init();
 
@@ -340,5 +392,45 @@ document.addEventListener('DOMContentLoaded', function () {
   if (best) {
     best.link.classList.add('active');
     best.link.closest('li')?.classList.add('active');
+  }
+});
+
+// SEARCH GLOSSARIO
+document.getElementById('glossary-search').addEventListener('input', function () {
+  const value = this.value.toLowerCase();
+  const groups = document.querySelectorAll('.glossary__group');
+
+  let foundAny = false; // 👈 AQUI começa
+
+  groups.forEach(group => {
+    const cards = group.querySelectorAll('.glossary__card');
+    let hasVisible = false;
+
+    cards.forEach(card => {
+      const termo = card.dataset.termo;
+
+      if (termo.includes(value)) {
+        card.style.display = 'block';
+        hasVisible = true;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (hasVisible) {
+      foundAny = true; // 👈 MARCA que encontrou algo
+      group.style.display = 'block';
+    } else {
+      group.style.display = 'none';
+    }
+  });
+  const emptyMsg = document.querySelector('.glossary__empty');
+
+  if (emptyMsg) {
+    if (!foundAny) {
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+    }
   }
 });

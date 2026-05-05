@@ -5,8 +5,9 @@
 @import 'components/footer';
 @import 'components/quem-somos';
 @import 'components/conheca-rede';
-@import 'components/faq';
+@import 'components/perguntas-frequentes';
 @import 'components/glossario';
+@import 'components/archive';
 
 // Global
 a,
@@ -38,11 +39,11 @@ ul {
   }
 }
 
-.justify-content-center {
-  justify-content: center;
-}
-
 body {
   background-color: $body-bg;
   color: $body-color;
+}
+
+main {
+    overflow: hidden;
 }

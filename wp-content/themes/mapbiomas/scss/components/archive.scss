@@ -1,0 +1,362 @@
+.news {
+    padding: $spacing-64-desktop 0;
+    background-color: $color-neutral-50;
+
+    .news__filter {
+        padding: $spacing-24-desktop 0;
+        form {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            @media (max-width: 767px) {
+                gap: 10px;
+            }
+            p {
+                color: $color-neutral-900;
+                font-size: $fs-16-desktop;
+                font-weight: 400;
+                margin: 0;
+                @media (max-width: 767px) {
+                    display: none;
+                }
+            }
+            .filter-btn {
+                background-color: $color-verde-claro;
+                border: none;
+                color: white;
+                padding: 8px 16px 8px 42px;
+                border-radius: 8px;
+                font-size: $fs-14-desktop;
+                background-image: url(assets/img/filter.svg);
+                background-repeat: no-repeat;
+                background-position: 14px 10px;
+            }
+            .filter-select {
+                position: relative;
+                border: thin solid $color-neutral-300;
+                border-radius: 8px;
+                padding: 6px 12px 6px 32px;
+                background: white;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 14px;
+                    transform: translateY(-50%);
+                    width: 16px;
+                    height: 16px;
+                    background-image: url(assets/img/globe.svg);
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                }
+                &:last-child {
+                    &:before {
+                        background-image: url(assets/img/folder.svg);
+                    }
+                }
+                select {
+                    border: none;
+                    color: $color-neutral-900;
+                    font-size: $fs-16-desktop;
+                    outline: none;
+                    @media (max-width: 767px) {
+                        font-size: $fs-14-desktop;
+                    }
+                }
+            }
+        }
+    }
+
+    .news-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        margin-bottom: $spacing-32-desktop;     
+        @media (max-width: 767px) {
+            display: block;
+        }
+        .news-card {
+            border-radius: 16px;
+            overflow: hidden;
+            @media (max-width: 767px) {
+                    margin-bottom: 30px;
+            }
+
+            &__image {
+                img {
+                    width: 100%;
+                    height: 160px;
+                    object-fit: cover;
+                }
+            }
+
+            &__content {
+                padding: 16px;
+                background-color: white;
+
+                h3 {
+                    font-size: $fs-16-desktop;
+                    font-weight: bold;
+                    color: $color-neutral-600;
+                }
+
+                p {
+                    display: none;
+                    font-size: $fs-14-desktop;
+                }
+            }
+
+            &__meta {
+                display: flex;
+                gap: 12px;
+                font-size: 12px;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+            .badge {
+                padding: 2px 8px;
+                border-radius: 16px;
+                font-size: 12px;
+                font-weight: 400;
+                font-family: $font-family-heading;
+                &.badge-publicacao {
+                    background: rgba($color-verde-claro, 0.08);
+                    color: $color-verde-claro;
+                }
+                &.badge-produto {
+                    background: rgba($color-azul-escuro, 0.08);
+                    color: $color-azul-escuro;
+                }
+                &.badge-mapbiomas-alerta {
+                    background: rgba(#E84130, 0.08);
+                    color: #E84130;
+                }
+                &.badge-mapbiomas-degradacao {
+                    background: rgba(#C5C56C, 0.08);
+                    color: #C5C56C;
+                }
+            }
+            .country {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.75rem;
+                font-weight: 500;
+                padding: 0.1rem 0.4rem 0.1rem 0.2rem;
+                color: $color-neutral-700;
+                background-color: $color-neutral-100;
+                border-radius: 16px;
+            }
+            .date {
+                color: $color-neutral-400;
+                font-size: $fs-14-desktop;
+            }
+            &.is-featured {
+                grid-column: span 2;
+                @media (max-width: 767px) {
+                    border: 3px solid $color-verde-claro;
+                }
+
+                .news-card__image {
+                    img {
+                        height: 320px;
+                    }
+                }
+
+                p {
+                    display: block;
+                }
+            }
+        }
+    }
+    .pagination {
+        display: table;
+        margin: 0 auto;
+        background-color: white;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        width: auto;
+        overflow: hidden;
+        border: thin solid $color-border;
+
+        .pagination__list {
+            display: flex;
+            align-items: center;
+
+            .page-numbers {
+                padding: 10px 16px;
+                border-right: thin solid $color-border;
+                color: $color-neutral-800;
+                font-size: $fs-14-desktop;
+                background-repeat: no-repeat;
+                background-position: right 16px center;
+                &:last-child {
+                    border-right: none;
+                }
+                &.current,
+                &:hover {
+                    background-color: $color-neutral-50;
+                }
+                &.next {
+                    padding-right: 44px;
+                    background-image: url(assets/img/next.svg);
+                } 
+                &.prev {
+                    padding-left: 44px;
+                    background-image: url(assets/img/previous.svg);
+                    background-position: left 16px center;
+                } 
+            }
+        }
+    }
+}
+
+.events {
+    padding: 0 0 $spacing-64-desktop 0;
+    background-color: $color-neutral-50;
+    h4 {
+        font-family: $font-family-heading;
+        font-size: $fs-36-desktop;
+        font-weight: 700;
+        color: $color-neutral-600;
+        margin-bottom: $spacing-32-desktop;
+    }
+    .badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .events__list__cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        @media (max-width: 767px) {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .event-card {
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+
+           &__image {
+                position: relative;
+                height: 250px;
+                overflow: hidden;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+
+                    background: linear-gradient(
+                    90deg,
+                    rgba(30, 43, 36, 0.9) 0%,
+                    rgba(30, 43, 36, 0.4) 50%,
+                    rgba(0, 0, 0, 1) 100%
+                    );
+                }
+
+                img {
+                    width: auto;
+                    height: auto;
+                    object-fit: cover;
+                    min-width: 100%;
+                    max-width: 100%;
+                    min-height: 250px;
+
+                }
+            }       
+
+            .event-date {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                background: $color-verde-claro;
+                color: white;
+                padding: 10px 16px;
+                border-radius: 14px;
+                font-family: $font-family-heading;
+                font-size: 12px;
+                font-weight: bold;
+                text-align: center;
+                line-height: 1.2;
+                text-transform: uppercase;
+                .day {
+                    font-size: 20px;
+                }
+            }
+
+            .event-content-date-tipo {
+                position: absolute;
+                bottom: 20px;
+                left: 0;
+                width: 100%;
+                padding: 0 20px;
+
+                .event-date-tipo {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 0.2rem;
+                    .badge {
+                        background: rgba($color-verde-claro, 0.2);
+                        color: $color-verde-claro;
+                        padding: 2px 8px;
+                        border-radius: 16px;
+                        font-size: 12px;
+                        font-weight: 400;
+                    }
+                    .date-full {
+                        font-size: 12px;
+                        color: #D1D5DC;
+                        background-image: url(assets/img/calendar.svg);
+                        background-repeat: no-repeat;
+                        background-position: 5px center;
+                        padding-left: 20px;
+                    }
+                }
+                h3 {
+                    font-family: $font-family-heading;
+                    font-size: $fs-18-desktop;
+                    font-weight: 700;
+                    color: white;
+                }
+                .event-local {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background-image: url(assets/img/pin.png);
+                    background-repeat: no-repeat;
+                    background-size: 10px auto;
+                    padding-left: 20px;
+                    p {
+                        font-size: 14px;
+                        color: #D1D5DC;
+                        line-height: 20px;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+
+            &__content {
+                padding: 16px;
+
+                p {
+                    font-size: 14px;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+
+    .icon {
+        fill: currentColor;
+    }
+}

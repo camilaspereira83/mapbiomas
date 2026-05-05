@@ -1,0 +1,46 @@
+@import '_bootstrap';
+@import '_aos';
+@import 'components/header';
+@import 'components/home';
+@import 'components/footer';
+@import 'components/quem-somos';
+@import 'components/timeline-carousel';
+@import 'components/conheca-rede';
+@import 'components/perguntas-frequentes';
+@import 'components/glossario';
+@import 'components/archive';
+
+// Global
+a,
+a:hover {
+  transition: 0.3s ease-in-out;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+   li {
+    list-style: none;
+   }
+}
+
+.desktop-version {
+  display: block;
+}
+.mobile-version {
+  display: none !important;
+}
+@media (max-width: 1199px) {
+  .desktop-version {
+    display: none !important;
+  }
+  .mobile-version {
+    display: block !important;
+  }
+}
+
+body {
+  background-color: $body-bg;
+  color: $body-color;
+}

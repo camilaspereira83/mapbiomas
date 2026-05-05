@@ -17,7 +17,5 @@ $path = get_template_directory_uri();
 
     <?php wp_footer(); ?>
 
-    <script src="<?php echo $path; ?>/script.js?v=<?php echo filemtime(__DIR__ . '/script.js'); ?>"></script>
-
   </body>
 </html>
