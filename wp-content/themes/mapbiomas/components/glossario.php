@@ -59,6 +59,18 @@
                             Nenhum resultado encontrado.
                         </p>
 
+                        <div class="glossary__letters">
+                            <button class="glossary__letter-filter active" data-letter="all">
+                                Todas
+                            </button>
+
+                            <?php foreach ($agrupado as $letra => $itens) : ?>
+                                <button class="glossary__letter-filter" data-letter="<?php echo $letra; ?>">
+                                    <?php echo $letra; ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+
                         <?php foreach ($agrupado as $letra => $itens) : ?>
                             <div class="glossary__group">
                                 <div class="glossary__letter"><?php echo $letra; ?></div>

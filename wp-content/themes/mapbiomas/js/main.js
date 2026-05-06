@@ -185,6 +185,17 @@ var main = {
             }
             }
 
+            const countryLabel = selectedThumbnail.dataset.countryLabel;
+            const countryIso   = selectedThumbnail.dataset.countryIso;
+            const flagsBase    = selectedThumbnail.dataset.flagsBase;
+            const locationDiv  = carousel.querySelector('.featured-location');
+            if (locationDiv && countryLabel) {
+                const flagImg   = locationDiv.querySelector('img');
+                const labelSpan = locationDiv.querySelector('span');
+                if (flagImg && flagsBase) flagImg.src = flagsBase + countryIso + '.svg';
+                if (labelSpan) labelSpan.textContent = countryLabel;
+            }
+
             thumbnails.forEach((thumb, i) => {
             thumb.classList.toggle('active', i === index);
             });
@@ -396,41 +407,83 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // SEARCH GLOSSARIO
-document.getElementById('glossary-search').addEventListener('input', function () {
-  const value = this.value.toLowerCase();
-  const groups = document.querySelectorAll('.glossary__group');
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('glossary-search');
+    const groups = document.querySelectorAll('.glossary__group');
+    const letterButtons = document.querySelectorAll('.glossary__letter-filter');
+    const emptyMsg = document.querySelector('.glossary__empty');
 
-  let foundAny = false; // 👈 AQUI começa
+    function showGroup(group) {
+    group.style.display = 'block';
+    }
 
-  groups.forEach(group => {
-    const cards = group.querySelectorAll('.glossary__card');
-    let hasVisible = false;
+    function hideGroup(group) {
+    group.style.display = 'none';
+    }
 
-    cards.forEach(card => {
-      const termo = card.dataset.termo;
+    searchInput.addEventListener('input', function () {
+    const value = this.value.toLowerCase();
 
-      if (termo.includes(value)) {
-        card.style.display = 'block';
-        hasVisible = true;
-      } else {
-        card.style.display = 'none';
-      }
+    letterButtons.forEach(b => b.classList.remove('active'));
+
+    let foundAny = false;
+
+    groups.forEach(group => {
+        const cards = group.querySelectorAll('.glossary__card');
+        let hasVisible = false;
+
+        cards.forEach(card => {
+        const termo = card.dataset.termo;
+
+        if (termo.includes(value)) {
+            card.style.display = 'block';
+            hasVisible = true;
+        } else {
+            card.style.display = 'none';
+        }
+        });
+
+        if (hasVisible) {
+        showGroup(group);
+        foundAny = true;
+        } else {
+        hideGroup(group);
+        }
     });
 
-    if (hasVisible) {
-      foundAny = true; // 👈 MARCA que encontrou algo
-      group.style.display = 'block';
-    } else {
-      group.style.display = 'none';
+    if (emptyMsg) {
+        emptyMsg.style.display = foundAny ? 'none' : 'block';
     }
-  });
-  const emptyMsg = document.querySelector('.glossary__empty');
+    });
 
-  if (emptyMsg) {
-    if (!foundAny) {
-      emptyMsg.style.display = 'block';
-    } else {
-      emptyMsg.style.display = 'none';
-    }
-  }
+    letterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const selectedLetter = btn.dataset.letter;
+
+        letterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        searchInput.value = '';
+
+        let firstVisibleGroup = null;
+
+        if (selectedLetter === 'all') {
+        groups.forEach(group => {
+            showGroup(group);
+            if (!firstVisibleGroup) firstVisibleGroup = group;
+        });
+        } else {
+        groups.forEach(group => {
+            const letter = group.querySelector('.glossary__letter').textContent.trim();
+
+            if (letter === selectedLetter) {
+            showGroup(group);
+            if (!firstVisibleGroup) firstVisibleGroup = group;
+            } else {
+            hideGroup(group);
+            }
+        });
+        }
+        if (emptyMsg) emptyMsg.style.display = 'none';
+    });
+    });
 });

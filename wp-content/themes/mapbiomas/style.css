@@ -7726,7 +7726,7 @@ body[data-aos-easing=ease-in-out-quart] [data-aos], [data-aos][data-aos][data-ao
   }
 }
 
-.home {
+.home.about__content {
   padding: 4rem 0;
 }
 .home__content {
@@ -8155,11 +8155,19 @@ body[data-aos-easing=ease-in-out-quart] [data-aos], [data-aos][data-aos][data-ao
 .news-events .home__news-events .news-events-content .news-carousel .thumbnails-carousel .thumbnails-wrapper .thumbnail-item .thumbnail-item-content {
   padding: 0.4rem;
 }
+.news-events .home__news-events .news-events-content .news-carousel .thumbnails-carousel .thumbnails-wrapper .thumbnail-item .thumbnail-item-content .flag-tag {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.news-events .home__news-events .news-events-content .news-carousel .thumbnails-carousel .thumbnails-wrapper .thumbnail-item .thumbnail-item-content .flag-tag .thumbnail-location {
+  height: 25px;
+}
 .news-events .home__news-events .news-events-content .news-carousel .thumbnails-carousel .thumbnails-wrapper .thumbnail-item .thumbnail-item-content .thumbnail-tag {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: 0.2rem;
 }
 .news-events .home__news-events .news-events-content .news-carousel .thumbnails-carousel .thumbnails-wrapper .thumbnail-item .thumbnail-item-content .thumbnail-tag.color-iniciativa {
   color: #77B893;
@@ -9406,6 +9414,49 @@ footer .footer-content-nav .footer-nav ul li a:hover {
 .glossary .glossary__group .glossary__card .glossary__header .badge.badge-mapbiomas-degradacao {
   background: rgba(197, 197, 108, 0.08);
   color: #C5C56C;
+}
+.glossary .glossary__letters {
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.glossary .glossary__letters button {
+  background: #4f8f6b;
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  width: auto;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 0 10px;
+  border: none;
+  transition: 0.3s ease-in-out;
+}
+.glossary .glossary__letters button:hover, .glossary .glossary__letters button.active {
+  background-color: white;
+  border: thin solid #4f8f6b;
+  color: #4f8f6b;
+  transition: 0.3s ease-in-out;
+}
+@media (max-width: 992px) {
+  .glossary .glossary__letters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .glossary .glossary__letters::-webkit-scrollbar {
+    display: none;
+  }
+  .glossary .glossary__letters .glossary__letter-filter {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 
 .news {

@@ -1,6 +1,8 @@
 // Home Section Styles
 .home {
-  padding: $spacing-64-desktop 0;
+  &.about__content {
+    padding: $spacing-64-desktop 0;
+  }
 
   &__content {
     text-align: center;
@@ -456,11 +458,19 @@
               }
               .thumbnail-item-content {
                 padding: 0.4rem;
+                .flag-tag {
+                    display: flex;
+                    gap: 6px;
+                    align-items: center;
+                    margin-bottom: 0.2rem;
+                    .thumbnail-location {
+                        height: 25px;
+                    }
+                }
                 .thumbnail-tag {
                     display: block;
                     font-size: $fs-14-desktop;
                     font-weight: 600;
-                    margin-bottom: 0.2rem;
                     &.color-iniciativa {
                         color: $color-verde-claro;
                     }

@@ -106,4 +106,47 @@
             }
         }
     }
+    .glossary__letters {
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        button {
+            background: $color-verde-escuro;
+            font-family: $font-family-heading;
+            color: white;
+            width: auto;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            border: none;
+            transition: 0.3s ease-in-out;
+            &:hover,
+            &.active {
+                background-color: white;
+                border: thin solid $color-verde-escuro;
+                color: $color-verde-escuro;
+                transition: 0.3s ease-in-out;
+            }
+        }
+        @media (max-width: 992px) {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            .glossary__letter-filter {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }    
+        }
+    }
 }
