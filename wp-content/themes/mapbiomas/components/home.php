@@ -14,7 +14,7 @@ $home_tab_events        = ($has_acf ? get_field('home_tab_events',        'optio
 $home_read_more         = ($has_acf ? get_field('home_read_more',         'option') : '') ?: 'Ler mais';
 $home_country_label     = ($has_acf ? get_field('home_news_country_label','option') : '') ?: 'Brasil';
 $home_country_iso2      = strtolower(($has_acf ? get_field('home_news_country_iso2', 'option') : '') ?: 'br');
-$home_posts_count       = intval(($has_acf ? get_field('home_posts_count', 'option') : 0) ?: 5);
+$home_posts_count       = -1;
 $home_empty_news        = ($has_acf ? get_field('home_empty_news',        'option') : '') ?: 'Nenhuma notícia encontrada.';
 $home_empty_events      = ($has_acf ? get_field('home_empty_events',      'option') : '') ?: 'Nenhum evento encontrado.';
 
@@ -104,16 +104,29 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                         'category_name'  => 'noticias',
                         'posts_per_page' => $home_posts_count,
                         'post_status'    => 'publish',
+                        'orderby'        => 'rand',
                     ]);
 
                     if ($noticias_query->have_posts()) :
                         $noticias_posts = $noticias_query->posts;
+                        // Prioriza posts com tradução PT no destaque; metas já em cache (WP_Query)
+                        usort($noticias_posts, function($a, $b) {
+                            $at = get_post_meta($a->ID, 'mbnn_title_pt', true);
+                            $bt = get_post_meta($b->ID, 'mbnn_title_pt', true);
+                            return (($bt && $bt !== '__FAILED__') ? 1 : 0) - (($at && $at !== '__FAILED__') ? 1 : 0);
+                        });
                         $first_noticia  = $noticias_posts[0];
                         $featured_image = get_the_post_thumbnail_url($first_noticia->ID, 'full')
                                         ?: get_post_meta($first_noticia->ID, 'mbnn_featured_image_url', true)
                                         ?: get_template_directory_uri() . '/assets/img/news-placeholder.jpg';
-                        $featured_title   = $first_noticia->post_title;
-                        $featured_excerpt = wp_trim_words($first_noticia->post_excerpt ?: $first_noticia->post_content, 20, '...');
+                        $feat_source_lang   = get_post_meta($first_noticia->ID, 'mbnn_source_lang', true) ?: 'pt';
+                        $_ft = get_post_meta($first_noticia->ID, 'mbnn_title_pt', true);
+                        $featured_title     = ($_ft && $_ft !== '__FAILED__') ? $_ft : $first_noticia->post_title;
+                        $_fe = get_post_meta($first_noticia->ID, 'mbnn_excerpt_pt', true);
+                        $featured_excerpt   = ($_fe && $_fe !== '__FAILED__') ? $_fe
+                                            : wp_trim_words($first_noticia->post_excerpt ?: $first_noticia->post_content, 20, '...');
+                        $featured_orig_title   = $first_noticia->post_title;
+                        $featured_orig_excerpt = wp_trim_words($first_noticia->post_excerpt ?: $first_noticia->post_content, 20, '...');
                         $featured_source  = get_post_meta($first_noticia->ID, 'mbnn_source_url', true);
                         $featured_link    = $featured_source ?: get_permalink($first_noticia->ID);
                         $featured_target  = $featured_source ? '_blank' : '_self';
@@ -149,17 +162,23 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                             <button class="carousel-arrow next-arrow">
                                 <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/img/arrow-next.svg'); ?>" alt="Próximo" width="13" height="13" />
                             </button>
-                            <div class="carousel-dots"></div>
                         </div>
 
                         <div class="thumbnails-carousel">
+                            <button class="thumb-arrow thumb-prev" aria-label="Anterior">&#8249;</button>
                             <div class="thumbnails-wrapper">
                                 <?php $index = 0; foreach ($noticias_posts as $noticia) :
-                                    $thumb_image   = get_the_post_thumbnail_url($noticia->ID, 'medium')
-                                        ?: get_post_meta($noticia->ID, 'mbnn_featured_image_url', true)
-                                        ?: get_template_directory_uri() . '/assets/img/news-placeholder.jpg';
-                                    $thumb_title   = $noticia->post_title;
-                                    $thumb_excerpt = wp_trim_words($noticia->post_excerpt ?: $noticia->post_content, 15, '...');
+                                    $fallback_img  = get_post_meta($noticia->ID, 'mbnn_featured_image_url', true)
+                                                    ?: get_template_directory_uri() . '/assets/img/news-placeholder.jpg';
+                                    $thumb_image   = get_the_post_thumbnail_url($noticia->ID, 'medium') ?: $fallback_img;
+                                    $full_image    = get_the_post_thumbnail_url($noticia->ID, 'full')   ?: $fallback_img;
+                                    $source_lang   = get_post_meta($noticia->ID, 'mbnn_source_lang', true) ?: 'pt';
+                                    $orig_title    = $noticia->post_title;
+                                    $orig_excerpt  = wp_trim_words($noticia->post_excerpt ?: $noticia->post_content, 15, '...');
+                                    $_tt = get_post_meta($noticia->ID, 'mbnn_title_pt', true);
+                                    $thumb_title   = ($_tt && $_tt !== '__FAILED__') ? $_tt : $orig_title;
+                                    $_te = get_post_meta($noticia->ID, 'mbnn_excerpt_pt', true);
+                                    $thumb_excerpt = ($_te && $_te !== '__FAILED__') ? $_te : $orig_excerpt;
                                     $thumb_source  = get_post_meta($noticia->ID, 'mbnn_source_url', true);
                                     $thumb_link    = $thumb_source ?: get_permalink($noticia->ID);
                                     $thumb_target  = $thumb_source ? '_blank' : '_self';
@@ -167,11 +186,11 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                     $thumb_pais    = ($has_acf ? get_field('pais', $noticia->ID) : '') ?: $home_country_label;
                                     $thumb_iso     = $map_paises_iso[$thumb_pais] ?? $home_country_iso2;
                                     $active_class  = ($index === 0) ? 'active' : '';
-                                    $tag_color = sanitize_title($thumb_tag);
+                                    $tag_color     = sanitize_title($thumb_tag);
                                 ?>
                                 <div class="thumbnail-item <?php echo esc_attr($active_class); ?>"
                                      data-index="<?php echo $index; ?>"
-                                     data-image="<?php echo esc_url($thumb_image); ?>"
+                                     data-image="<?php echo esc_url($full_image); ?>"
                                      data-title="<?php echo esc_attr($thumb_title); ?>"
                                      data-excerpt="<?php echo esc_attr($thumb_excerpt); ?>"
                                      data-link="<?php echo esc_url($thumb_link); ?>"
@@ -179,14 +198,17 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                      data-tag="<?php echo esc_attr($thumb_tag); ?>"
                                      data-country-label="<?php echo esc_attr($thumb_pais); ?>"
                                      data-country-iso="<?php echo esc_attr($thumb_iso); ?>"
-                                     data-flags-base="<?php echo esc_url($flags_base); ?>">
+                                     data-flags-base="<?php echo esc_url($flags_base); ?>"
+                                     data-lang="<?php echo esc_attr($source_lang); ?>"
+                                     data-orig-title="<?php echo esc_attr($orig_title); ?>"
+                                     data-orig-excerpt="<?php echo esc_attr($orig_excerpt); ?>">
                                     <div class="thumbnail-item-img">
                                         <img src="<?php echo esc_url($thumb_image); ?>" alt="<?php echo esc_attr($thumb_title); ?>" />
                                     </div>
                                     <div class="thumbnail-item-content">
                                         <div class="flag-tag">
                                             <div class="thumbnail-location">
-                                                <img src="<?php echo esc_url($flags_base . $featured_iso . '.svg'); ?>" alt="<?php echo esc_attr($featured_pais); ?>" width="16" height="16" />
+                                                <img src="<?php echo esc_url($flags_base . $thumb_iso . '.svg'); ?>" alt="<?php echo esc_attr($thumb_pais); ?>" width="16" height="16" />
                                             </div>
                                             <?php if ($thumb_tag) : ?>
                                                 <span class="thumbnail-tag color-<?php echo esc_attr($tag_color); ?>"><?php echo esc_html($thumb_tag); ?></span>
@@ -197,29 +219,47 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                 </div>
                                 <?php $index++; endforeach; ?>
                             </div>
+                            <button class="thumb-arrow thumb-next" aria-label="Próximo">&#8250;</button>
                         </div>
                     </div>
                     <?php else : ?>
                         <p><?php echo esc_html($home_empty_news); ?></p>
                     <?php endif; ?>
+                    <div class="view-all-wrap">
+                        <a href="<?php echo esc_url(get_term_link('noticias', 'category')); ?>" class="view-all-btn">
+                            Ver todas as notícias
+                        </a>
+                    </div>
                 </div>
 
                 <div class="tab-content" id="eventos">
                     <?php
                     $eventos_query = new WP_Query([
                         'category_name'  => 'eventos',
-                        'posts_per_page' => 5,
+                        'posts_per_page' => $home_posts_count,
                         'post_status'    => 'publish',
+                        'orderby'        => 'rand',
                     ]);
 
                     if ($eventos_query->have_posts()) :
                         $eventos_posts = $eventos_query->posts;
+                        usort($eventos_posts, function($a, $b) {
+                            $at = get_post_meta($a->ID, 'mbnn_title_pt', true);
+                            $bt = get_post_meta($b->ID, 'mbnn_title_pt', true);
+                            return (($bt && $bt !== '__FAILED__') ? 1 : 0) - (($at && $at !== '__FAILED__') ? 1 : 0);
+                        });
                         $first_evento  = $eventos_posts[0];
                         $featured_image = get_the_post_thumbnail_url($first_evento->ID, 'full')
                                         ?: get_post_meta($first_evento->ID, 'mbnn_featured_image_url', true)
                                         ?: get_template_directory_uri() . '/assets/img/event-placeholder.jpg';
-                        $featured_title   = $first_evento->post_title;
-                        $featured_excerpt = wp_trim_words($first_evento->post_excerpt ?: $first_evento->post_content, 20, '...');
+                        $feat_source_lang   = get_post_meta($first_evento->ID, 'mbnn_source_lang', true) ?: 'pt';
+                        $_ft = get_post_meta($first_evento->ID, 'mbnn_title_pt', true);
+                        $featured_title     = ($_ft && $_ft !== '__FAILED__') ? $_ft : $first_evento->post_title;
+                        $_fe = get_post_meta($first_evento->ID, 'mbnn_excerpt_pt', true);
+                        $featured_excerpt   = ($_fe && $_fe !== '__FAILED__') ? $_fe
+                                            : wp_trim_words($first_evento->post_excerpt ?: $first_evento->post_content, 20, '...');
+                        $featured_orig_title   = $first_evento->post_title;
+                        $featured_orig_excerpt = wp_trim_words($first_evento->post_excerpt ?: $first_evento->post_content, 20, '...');
                         $featured_source  = get_post_meta($first_evento->ID, 'mbnn_source_url', true);
                         $featured_link    = $featured_source ?: get_permalink($first_evento->ID);
                         $featured_target  = $featured_source ? '_blank' : '_self';
@@ -258,13 +298,20 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                         </div>
 
                         <div class="thumbnails-carousel">
+                            <button class="thumb-arrow thumb-prev" aria-label="Anterior">&#8249;</button>
                             <div class="thumbnails-wrapper">
                                 <?php $index = 0; foreach ($eventos_posts as $evento) :
-                                    $thumb_image   = get_the_post_thumbnail_url($evento->ID, 'medium')
-                                        ?: get_post_meta($evento->ID, 'mbnn_featured_image_url', true)
-                                        ?: get_template_directory_uri() . '/assets/img/event-placeholder.jpg';
-                                    $thumb_title   = $evento->post_title;
-                                    $thumb_excerpt = wp_trim_words($evento->post_excerpt ?: $evento->post_content, 15, '...');
+                                    $fallback_img  = get_post_meta($evento->ID, 'mbnn_featured_image_url', true)
+                                                    ?: get_template_directory_uri() . '/assets/img/event-placeholder.jpg';
+                                    $thumb_image   = get_the_post_thumbnail_url($evento->ID, 'medium') ?: $fallback_img;
+                                    $full_image    = get_the_post_thumbnail_url($evento->ID, 'full')   ?: $fallback_img;
+                                    $source_lang   = get_post_meta($evento->ID, 'mbnn_source_lang', true) ?: 'pt';
+                                    $orig_title    = $evento->post_title;
+                                    $orig_excerpt  = wp_trim_words($evento->post_excerpt ?: $evento->post_content, 15, '...');
+                                    $_tt = get_post_meta($evento->ID, 'mbnn_title_pt', true);
+                                    $thumb_title   = ($_tt && $_tt !== '__FAILED__') ? $_tt : $orig_title;
+                                    $_te = get_post_meta($evento->ID, 'mbnn_excerpt_pt', true);
+                                    $thumb_excerpt = ($_te && $_te !== '__FAILED__') ? $_te : $orig_excerpt;
                                     $thumb_source  = get_post_meta($evento->ID, 'mbnn_source_url', true);
                                     $thumb_link    = $thumb_source ?: get_permalink($evento->ID);
                                     $thumb_target  = $thumb_source ? '_blank' : '_self';
@@ -272,11 +319,11 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                     $thumb_pais    = ($has_acf ? get_field('pais', $evento->ID) : '') ?: $home_country_label;
                                     $thumb_iso     = $map_paises_iso[$thumb_pais] ?? $home_country_iso2;
                                     $active_class  = ($index === 0) ? 'active' : '';
-                                    $tag_color = sanitize_title($thumb_tag);
+                                    $tag_color     = sanitize_title($thumb_tag);
                                 ?>
                                 <div class="thumbnail-item <?php echo esc_attr($active_class); ?>"
                                      data-index="<?php echo $index; ?>"
-                                     data-image="<?php echo esc_url($thumb_image); ?>"
+                                     data-image="<?php echo esc_url($full_image); ?>"
                                      data-title="<?php echo esc_attr($thumb_title); ?>"
                                      data-excerpt="<?php echo esc_attr($thumb_excerpt); ?>"
                                      data-link="<?php echo esc_url($thumb_link); ?>"
@@ -284,7 +331,10 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                      data-tag="<?php echo esc_attr($thumb_tag); ?>"
                                      data-country-label="<?php echo esc_attr($thumb_pais); ?>"
                                      data-country-iso="<?php echo esc_attr($thumb_iso); ?>"
-                                     data-flags-base="<?php echo esc_url($flags_base); ?>">
+                                     data-flags-base="<?php echo esc_url($flags_base); ?>"
+                                     data-lang="<?php echo esc_attr($source_lang); ?>"
+                                     data-orig-title="<?php echo esc_attr($orig_title); ?>"
+                                     data-orig-excerpt="<?php echo esc_attr($orig_excerpt); ?>">
                                     <div class="thumbnail-item-img">
                                         <img src="<?php echo esc_url($thumb_image); ?>" alt="<?php echo esc_attr($thumb_title); ?>" />
                                     </div>
@@ -297,11 +347,17 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
                                 </div>
                                 <?php $index++; endforeach; ?>
                             </div>
+                            <button class="thumb-arrow thumb-next" aria-label="Próximo">&#8250;</button>
                         </div>
                     </div>
                     <?php else : ?>
                         <p><?php echo esc_html($home_empty_events); ?></p>
                     <?php endif; ?>
+                    <div class="view-all-wrap">
+                        <a href="<?php echo esc_url(get_term_link('eventos', 'category')); ?>" class="view-all-btn">
+                            Ver todos os eventos
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -309,6 +365,10 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
 </section>
 <script>
 (function () {
+    function getSiteLang() {
+        return (localStorage.getItem('mbmap_lang') || 'pt').toLowerCase();
+    }
+
     function initCountrySync(carousel) {
         var locationDiv = carousel.querySelector('.featured-location');
         if (!locationDiv) return;
@@ -316,35 +376,74 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
         var labelSpan = locationDiv.querySelector('span');
 
         function applyThumb(thumb) {
-            var label  = thumb.dataset.countryLabel;
-            var iso    = thumb.dataset.countryIso;
-            var base   = thumb.dataset.flagsBase;
-            var target = thumb.dataset.target || '_self';
+            var siteLang = getSiteLang();
+            var label    = thumb.dataset.countryLabel;
+            var iso      = thumb.dataset.countryIso;
+            var base     = thumb.dataset.flagsBase;
+            var target   = thumb.dataset.target || '_self';
+            var postLang = thumb.dataset.lang || 'pt';
+            var useOrig  = postLang !== 'pt' && siteLang === postLang;
 
             if (label) {
                 if (flagImg && base) flagImg.src = base + iso + '.svg';
                 if (labelSpan) labelSpan.textContent = label;
             }
 
-            var rel = target === '_blank' ? 'noopener noreferrer' : '';
-            var featuredTitle = carousel.querySelector('.featured-title a');
-            var readMoreBtn   = carousel.querySelector('.read-more-btn');
-            if (featuredTitle) { featuredTitle.target = target; featuredTitle.rel = rel; }
-            if (readMoreBtn)   { readMoreBtn.target   = target; readMoreBtn.rel   = rel; }
+            var rel             = target === '_blank' ? 'noopener noreferrer' : '';
+            var featuredTitleEl = carousel.querySelector('.featured-title a');
+            var excerptEl       = carousel.querySelector('.featured-excerpt');
+            var readMoreBtn     = carousel.querySelector('.read-more-btn');
+
+            var shouldUpdateText = useOrig || siteLang === 'pt';
+
+            if (featuredTitleEl) {
+                featuredTitleEl.href   = thumb.dataset.link || featuredTitleEl.href;
+                featuredTitleEl.target = target;
+                featuredTitleEl.rel    = rel;
+                if (shouldUpdateText) {
+                    var newTitle = useOrig
+                        ? (thumb.dataset.origTitle || thumb.dataset.title)
+                        : thumb.dataset.title;
+                    if (newTitle) featuredTitleEl.textContent = newTitle;
+                }
+            }
+            if (excerptEl && shouldUpdateText) {
+                var newExcerpt = useOrig
+                    ? (thumb.dataset.origExcerpt || thumb.dataset.excerpt)
+                    : thumb.dataset.excerpt;
+                if (newExcerpt) excerptEl.textContent = newExcerpt;
+            }
+            if (readMoreBtn) {
+                readMoreBtn.href   = thumb.dataset.link || readMoreBtn.href;
+                readMoreBtn.target = target;
+                readMoreBtn.rel    = rel;
+            }
         }
 
-        // Observa mudança de classe nos thumbnails: quando 'active' é adicionado, atualiza o país
+        function applyActiveThumb() {
+            var active = carousel.querySelector('.thumbnail-item.active');
+            if (active) applyThumb(active);
+        }
+
+        setTimeout(applyActiveThumb, 200);
+
         var observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (m) {
                 if (m.attributeName === 'class' && m.target.classList.contains('active')) {
-                    applyThumb(m.target);
+                    setTimeout(applyActiveThumb, 200);
                 }
             });
         });
 
         carousel.querySelectorAll('.thumbnail-item').forEach(function (thumb) {
             observer.observe(thumb, { attributes: true, attributeFilter: ['class'] });
+            thumb.addEventListener('click', function () { setTimeout(applyActiveThumb, 200); });
         });
+
+        var prevArrow = carousel.querySelector('.prev-arrow');
+        var nextArrow = carousel.querySelector('.next-arrow');
+        if (prevArrow) prevArrow.addEventListener('click', function () { setTimeout(applyActiveThumb, 200); });
+        if (nextArrow) nextArrow.addEventListener('click', function () { setTimeout(applyActiveThumb, 200); });
     }
 
     function setup() {
@@ -355,6 +454,41 @@ $flags_base = get_template_directory_uri() . '/assets/img/flags/';
         document.addEventListener('DOMContentLoaded', setup);
     } else {
         setup();
+    }
+})();
+
+(function () {
+    function initThumbNav(tc) {
+        var wrapper  = tc.querySelector('.thumbnails-wrapper');
+        var prevBtn  = tc.querySelector('.thumb-prev');
+        var nextBtn  = tc.querySelector('.thumb-next');
+        if (!wrapper || !prevBtn || !nextBtn) return;
+
+        function scrollBy(dir) {
+            var item = wrapper.querySelector('.thumbnail-item');
+            var step = item ? item.offsetWidth + parseInt(getComputedStyle(wrapper).gap || 16) : 200;
+            wrapper.scrollBy({ left: dir * step * 2, behavior: 'smooth' });
+        }
+
+        function updateBtns() {
+            prevBtn.disabled = wrapper.scrollLeft <= 1;
+            nextBtn.disabled = wrapper.scrollLeft >= wrapper.scrollWidth - wrapper.clientWidth - 1;
+        }
+
+        prevBtn.addEventListener('click', function () { scrollBy(-1); });
+        nextBtn.addEventListener('click', function () { scrollBy(1); });
+        wrapper.addEventListener('scroll', updateBtns, { passive: true });
+        updateBtns();
+    }
+
+    function setupThumbNav() {
+        document.querySelectorAll('.thumbnails-carousel').forEach(initThumbNav);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupThumbNav);
+    } else {
+        setupThumbNav();
     }
 })();
 </script>

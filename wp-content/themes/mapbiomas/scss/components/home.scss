@@ -194,6 +194,26 @@
         }
       }
 
+      .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1.5rem;
+        background-color: transparent;
+        color: #77B893;
+        border: 2px solid #77B893;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: background-color 0.2s, color 0.2s;
+
+        &:hover {
+            background-color: #77B893;
+            color: white;
+        }
+      }
+
       .news-carousel {
         max-width: 100%;
         
@@ -312,6 +332,8 @@
                 line-height: 1.6;
                 color: white;
                 margin-bottom: 1.5rem;
+                display: -webkit-box;
+                overflow: hidden;
                 @media (max-width: 992px) {
                     font-size: $fs-14-desktop;
                 }
@@ -411,6 +433,7 @@
           position: relative;
           display: flex;
           align-items: center;
+          gap: 0.5rem;
 
           .thumbnails-wrapper {
             flex: 1;
@@ -495,6 +518,31 @@
                     height: 50px;
                     overflow: hidden;
                 }
+                .thumb-arrow {
+                    flex-shrink: 0;
+                    width: 34px;
+                    height: 34px;
+                    border: none;
+                    border-radius: 50%;
+                    background-color: #77B893;
+                    color: white;
+                    font-size: 1.4rem;
+                    line-height: 1;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: background-color 0.2s, opacity 0.2s;
+                    padding: 0;
+
+                    &:hover {
+                        background-color: #56a679;
+                    }
+                    &:disabled {
+                        opacity: 0.3;
+                        cursor: default;
+                    }
+                  }
               }
             }
           }

@@ -102,6 +102,22 @@
                         background: rgba(#C5C56C, 0.08);
                         color: #C5C56C;
                     }
+                    &.badge-tecnologia {
+                        background: rgba(13, 110, 253, 0.08);
+                        color: #0d6efd;
+                    }
+                    &.badge-metodologia {
+                        background: rgba(111, 66, 193, 0.08);
+                        color: #6f42c1;
+                    }
+                    &.badge-sigla {
+                        background: rgba(253, 126, 20, 0.08);
+                        color: #fd7e14;
+                    }
+                    &.badge-termo {
+                        background: rgba(79, 143, 107, 0.08);
+                        color: #4f8f6b;
+                    }
                 }
             }
         }
